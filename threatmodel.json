@@ -1,0 +1,1242 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2026-07-19T19:58:14.444Z",
+  "stateIntegrity": {
+    "graphHash": "b47bb7ed5e788657e799bc33c052627bf72a7c96521d550488e5a0a730165d34",
+    "registerHash": "67e67f67e275513e0160c8e49cb83cb03865db0fbaddcbf9d8688c65904ae34c",
+    "algorithm": "sha256-stable-json-v2",
+    "configHash": "ce89e6595672ef2c2c95a681d1c0eed4a0efd83b201baee4aed6a0b244350fd3",
+    "contextHash": "3e2be10dbf6afa4e43175d5d86c8a46e704aded921f0e2b3705e731e32bbeaf4",
+    "toolVersion": "0.5.2"
+  },
+  "nextRiskNumber": 8,
+  "graph": {
+    "schemaVersion": "0.1",
+    "generatedAt": "2026-07-19T19:58:14.428Z",
+    "repository": "local",
+    "framework": "nextjs",
+    "nodes": [
+      {
+        "id": "auth-control:7bf2b37d213596d1",
+        "kind": "auth-control",
+        "label": "Authentication check: auth",
+        "trustZone": "application",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 2,
+            "snippet": "const session = await auth(request);",
+            "extractor": "typescript-ast-control",
+            "subjectId": "auth-control:7bf2b37d213596d1"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "file": "app/api/notes/route.ts",
+          "controlType": "authentication"
+        }
+      },
+      {
+        "id": "authorization-control:20b83844dc80aa0d",
+        "kind": "authorization-control",
+        "label": "Resource ownership derivation",
+        "trustZone": "application",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 9,
+            "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+            "extractor": "typescript-ast-control",
+            "subjectId": "authorization-control:20b83844dc80aa0d"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "file": "app/api/notes/route.ts",
+          "controlType": "ownership"
+        }
+      },
+      {
+        "id": "authorization-control:f2e1d5e80a7ef898",
+        "kind": "authorization-control",
+        "label": "Resource ownership constraint",
+        "trustZone": "application",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 4,
+            "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+            "extractor": "typescript-ast-control",
+            "subjectId": "authorization-control:f2e1d5e80a7ef898"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "file": "app/api/notes/route.ts",
+          "controlType": "ownership"
+        }
+      },
+      {
+        "id": "data-model:Note",
+        "kind": "data-model",
+        "label": "Note",
+        "trustZone": "data",
+        "evidence": [
+          {
+            "file": "prisma/schema.prisma",
+            "line": 6,
+            "snippet": "model Note {",
+            "extractor": "prisma-extractor",
+            "subjectId": "data-model:Note"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "model": "Note",
+          "fields": [
+            "id",
+            "ownerId",
+            "owner",
+            "title",
+            "body"
+          ],
+          "sensitiveFields": [],
+          "sensitive": false
+        }
+      },
+      {
+        "id": "data-model:User",
+        "kind": "data-model",
+        "label": "User",
+        "trustZone": "data",
+        "evidence": [
+          {
+            "file": "prisma/schema.prisma",
+            "line": 1,
+            "snippet": "model User {",
+            "extractor": "prisma-extractor",
+            "subjectId": "data-model:User"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "model": "User",
+          "fields": [
+            "id",
+            "notes"
+          ],
+          "sensitiveFields": [],
+          "sensitive": true
+        }
+      },
+      {
+        "id": "database:754eec4f7490bdab",
+        "kind": "database",
+        "label": "Database read: note.findMany",
+        "trustZone": "data",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 4,
+            "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+            "extractor": "typescript-ast-operation",
+            "subjectId": "database:754eec4f7490bdab"
+          }
+        ],
+        "controls": [
+          {
+            "type": "authentication",
+            "label": "Authentication check: auth",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 2,
+                "snippet": "const session = await auth(request);",
+                "extractor": "typescript-ast-control",
+                "subjectId": "database:754eec4f7490bdab"
+              }
+            ],
+            "confidence": 0.93,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership constraint",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 4,
+                "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+                "extractor": "typescript-ast-control",
+                "subjectId": "database:754eec4f7490bdab"
+              }
+            ],
+            "confidence": 0.81,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership derivation",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 9,
+                "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+                "extractor": "typescript-ast-control",
+                "subjectId": "database:754eec4f7490bdab"
+              }
+            ],
+            "confidence": 0.84,
+            "assurance": "confirmed"
+          }
+        ],
+        "metadata": {
+          "file": "app/api/notes/route.ts",
+          "model": "note",
+          "operation": "findMany",
+          "userControlled": true
+        }
+      },
+      {
+        "id": "dependency:@aws-sdk/client-s3",
+        "kind": "dependency",
+        "label": "@aws-sdk/client-s3@^3.0.0",
+        "trustZone": "external",
+        "evidence": [
+          {
+            "file": "package.json",
+            "line": 1,
+            "snippet": "{",
+            "extractor": "package-extractor",
+            "subjectId": "dependency:@aws-sdk/client-s3"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "name": "@aws-sdk/client-s3",
+          "version": "^3.0.0"
+        }
+      },
+      {
+        "id": "dependency:next",
+        "kind": "dependency",
+        "label": "next@16.0.0",
+        "trustZone": "external",
+        "evidence": [
+          {
+            "file": "package.json",
+            "line": 1,
+            "snippet": "{",
+            "extractor": "package-extractor",
+            "subjectId": "dependency:next"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "name": "next",
+          "version": "16.0.0"
+        }
+      },
+      {
+        "id": "dependency:prisma",
+        "kind": "dependency",
+        "label": "prisma@^6.0.0",
+        "trustZone": "external",
+        "evidence": [
+          {
+            "file": "package.json",
+            "line": 1,
+            "snippet": "{",
+            "extractor": "package-extractor",
+            "subjectId": "dependency:prisma"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "name": "prisma",
+          "version": "^6.0.0"
+        }
+      },
+      {
+        "id": "entrypoint:4b2ea28c1d4f8a82",
+        "kind": "entrypoint",
+        "label": "Workflow Hedge Codex remediation (issue_comment)",
+        "trustZone": "public",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge-fix.yml",
+            "line": 4,
+            "snippet": "issue_comment:",
+            "extractor": "github-workflow-metadata",
+            "subjectId": "entrypoint:4b2ea28c1d4f8a82"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "method": "WORKFLOW",
+          "event": "issue_comment",
+          "file": ".github/workflows/hedge-fix.yml",
+          "pullRequestTarget": false,
+          "permissions": {
+            "job:authorize:contents": "read",
+            "job:authorize:issues": "read",
+            "job:authorize:pull-requests": "read",
+            "job:remediate:contents": "read",
+            "job:validate-patch:contents": "read",
+            "job:publish-draft:contents": "write",
+            "job:publish-draft:pull-requests": "write"
+          },
+          "writePermissions": [
+            "job:publish-draft:contents",
+            "job:publish-draft:pull-requests"
+          ],
+          "checksOutPullRequestHead": false,
+          "untrustedInterpolationInRun": false,
+          "checkoutPersistsCredentials": false
+        }
+      },
+      {
+        "id": "entrypoint:7687698fbe395d3f",
+        "kind": "entrypoint",
+        "label": "GET /api/notes",
+        "trustZone": "public",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 1,
+            "snippet": "export async function GET(request: Request) {",
+            "extractor": "nextjs-ast-route",
+            "subjectId": "entrypoint:7687698fbe395d3f"
+          }
+        ],
+        "controls": [
+          {
+            "type": "authentication",
+            "label": "Authentication check: auth",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 2,
+                "snippet": "const session = await auth(request);",
+                "extractor": "typescript-ast-control",
+                "subjectId": "entrypoint:7687698fbe395d3f"
+              }
+            ],
+            "confidence": 0.93,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership constraint",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 4,
+                "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+                "extractor": "typescript-ast-control",
+                "subjectId": "entrypoint:7687698fbe395d3f"
+              }
+            ],
+            "confidence": 0.81,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership derivation",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 9,
+                "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+                "extractor": "typescript-ast-control",
+                "subjectId": "entrypoint:7687698fbe395d3f"
+              }
+            ],
+            "confidence": 0.84,
+            "assurance": "confirmed"
+          }
+        ],
+        "metadata": {
+          "method": "GET",
+          "path": "/api/notes",
+          "file": "app/api/notes/route.ts",
+          "framework": "nextjs",
+          "handler": "GET",
+          "extractor": "typescript-ast"
+        }
+      },
+      {
+        "id": "entrypoint:990d177729aa156e",
+        "kind": "entrypoint",
+        "label": "Workflow Hedge risk acceptance (issue_comment)",
+        "trustZone": "public",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge-prune.yml",
+            "line": 3,
+            "snippet": "issue_comment:",
+            "extractor": "github-workflow-metadata",
+            "subjectId": "entrypoint:990d177729aa156e"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "method": "WORKFLOW",
+          "event": "issue_comment",
+          "file": ".github/workflows/hedge-prune.yml",
+          "pullRequestTarget": false,
+          "permissions": {
+            "workflow:contents": "write",
+            "workflow:pull-requests": "write",
+            "workflow:issues": "read"
+          },
+          "writePermissions": [
+            "workflow:contents",
+            "workflow:pull-requests"
+          ],
+          "checksOutPullRequestHead": false,
+          "untrustedInterpolationInRun": false,
+          "checkoutPersistsCredentials": true
+        }
+      },
+      {
+        "id": "entrypoint:9a322eb01dabea6f",
+        "kind": "entrypoint",
+        "label": "Workflow Hedge counterfactual verification (workflow_dispatch)",
+        "trustZone": "application",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge-verify.yml",
+            "line": 4,
+            "snippet": "workflow_dispatch:",
+            "extractor": "github-workflow-metadata",
+            "subjectId": "entrypoint:9a322eb01dabea6f"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "method": "WORKFLOW",
+          "event": "workflow_dispatch",
+          "file": ".github/workflows/hedge-verify.yml",
+          "pullRequestTarget": false,
+          "permissions": {
+            "workflow:contents": "read",
+            "job:validate-inputs:contents": "read",
+            "job:prepare-witness:contents": "read",
+            "job:witness-counterfactual:contents": "read",
+            "job:legitimate-behavior:contents": "read",
+            "job:architecture-delta:contents": "read",
+            "job:aggregate-evidence:contents": "read",
+            "job:record-state:contents": "write",
+            "job:record-state:pull-requests": "write"
+          },
+          "writePermissions": [
+            "job:record-state:contents",
+            "job:record-state:pull-requests"
+          ],
+          "checksOutPullRequestHead": false,
+          "untrustedInterpolationInRun": false,
+          "checkoutPersistsCredentials": false
+        }
+      },
+      {
+        "id": "entrypoint:b076fdc38a2fd3cc",
+        "kind": "entrypoint",
+        "label": "Workflow Refresh Hedge model (push)",
+        "trustZone": "application",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge-refresh.yml",
+            "line": 3,
+            "snippet": "push:",
+            "extractor": "github-workflow-metadata",
+            "subjectId": "entrypoint:b076fdc38a2fd3cc"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "method": "WORKFLOW",
+          "event": "push",
+          "file": ".github/workflows/hedge-refresh.yml",
+          "pullRequestTarget": false,
+          "permissions": {
+            "workflow:contents": "write",
+            "workflow:pull-requests": "write"
+          },
+          "writePermissions": [
+            "workflow:contents",
+            "workflow:pull-requests"
+          ],
+          "checksOutPullRequestHead": false,
+          "untrustedInterpolationInRun": false,
+          "checkoutPersistsCredentials": true
+        }
+      },
+      {
+        "id": "entrypoint:e5ae053d65935696",
+        "kind": "entrypoint",
+        "label": "Workflow Hedge security diff (pull_request_target)",
+        "trustZone": "public",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge.yml",
+            "line": 7,
+            "snippet": "pull_request_target:",
+            "extractor": "github-workflow-metadata",
+            "subjectId": "entrypoint:e5ae053d65935696"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "method": "WORKFLOW",
+          "event": "pull_request_target",
+          "file": ".github/workflows/hedge.yml",
+          "pullRequestTarget": true,
+          "permissions": {
+            "workflow:contents": "read",
+            "job:collect:contents": "read",
+            "job:collect:pull-requests": "read",
+            "job:publish:contents": "read",
+            "job:publish:pull-requests": "write",
+            "job:publish:security-events": "write"
+          },
+          "writePermissions": [
+            "job:publish:pull-requests",
+            "job:publish:security-events"
+          ],
+          "checksOutPullRequestHead": true,
+          "untrustedInterpolationInRun": false,
+          "checkoutPersistsCredentials": false
+        }
+      },
+      {
+        "id": "secret:07d154c042bee004",
+        "kind": "secret",
+        "label": "OPENAI_API_KEY",
+        "trustZone": "privileged",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge-fix.yml",
+            "line": 174,
+            "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+            "extractor": "typescript-ast-secret",
+            "subjectId": "secret:07d154c042bee004"
+          },
+          {
+            "file": ".github/workflows/hedge.yml",
+            "line": 92,
+            "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+            "extractor": "typescript-ast-secret",
+            "subjectId": "secret:07d154c042bee004"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "name": "OPENAI_API_KEY"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:3af551256deab10a",
+        "from": "entrypoint:7687698fbe395d3f",
+        "to": "authorization-control:f2e1d5e80a7ef898",
+        "kind": "authorizes",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 4,
+            "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+            "extractor": "typescript-ast-control",
+            "subjectId": "edge:3af551256deab10a"
+          }
+        ],
+        "controls": [
+          {
+            "type": "ownership",
+            "label": "Resource ownership constraint",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 4,
+                "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:3af551256deab10a"
+              }
+            ],
+            "confidence": 0.81,
+            "assurance": "confirmed"
+          }
+        ],
+        "confidence": 0.81
+      },
+      {
+        "id": "edge:4be1acae82feb540",
+        "from": "entrypoint:7687698fbe395d3f",
+        "to": "authorization-control:20b83844dc80aa0d",
+        "kind": "authorizes",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 9,
+            "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+            "extractor": "typescript-ast-control",
+            "subjectId": "edge:4be1acae82feb540"
+          }
+        ],
+        "controls": [
+          {
+            "type": "ownership",
+            "label": "Resource ownership derivation",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 9,
+                "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:4be1acae82feb540"
+              }
+            ],
+            "confidence": 0.84,
+            "assurance": "confirmed"
+          }
+        ],
+        "confidence": 0.84
+      },
+      {
+        "id": "edge:86b3e9be43ddf15a",
+        "from": "entrypoint:e5ae053d65935696",
+        "to": "secret:07d154c042bee004",
+        "kind": "uses-secret",
+        "label": "Workflow uses OPENAI_API_KEY",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge.yml",
+            "line": 92,
+            "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+            "extractor": "github-workflow-secret",
+            "subjectId": "edge:86b3e9be43ddf15a"
+          }
+        ],
+        "controls": [],
+        "confidence": 1
+      },
+      {
+        "id": "edge:8ffdc332815a44a2",
+        "from": "entrypoint:7687698fbe395d3f",
+        "to": "database:754eec4f7490bdab",
+        "kind": "reads",
+        "label": "Database read: note.findMany",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 4,
+            "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+            "extractor": "typescript-ast-operation",
+            "subjectId": "edge:8ffdc332815a44a2"
+          }
+        ],
+        "controls": [
+          {
+            "type": "authentication",
+            "label": "Authentication check: auth",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 2,
+                "snippet": "const session = await auth(request);",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:8ffdc332815a44a2"
+              }
+            ],
+            "confidence": 0.93,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership constraint",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 4,
+                "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:8ffdc332815a44a2"
+              }
+            ],
+            "confidence": 0.81,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership derivation",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 9,
+                "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:8ffdc332815a44a2"
+              }
+            ],
+            "confidence": 0.84,
+            "assurance": "confirmed"
+          }
+        ],
+        "confidence": 0.94
+      },
+      {
+        "id": "edge:d525216bd1bb2930",
+        "from": "database:754eec4f7490bdab",
+        "to": "data-model:Note",
+        "kind": "reads",
+        "label": "Database read: note.findMany",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 4,
+            "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+            "extractor": "typescript-ast-operation",
+            "subjectId": "edge:d525216bd1bb2930"
+          }
+        ],
+        "controls": [
+          {
+            "type": "authentication",
+            "label": "Authentication check: auth",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 2,
+                "snippet": "const session = await auth(request);",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:d525216bd1bb2930"
+              }
+            ],
+            "confidence": 0.93,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership constraint",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 4,
+                "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:d525216bd1bb2930"
+              }
+            ],
+            "confidence": 0.81,
+            "assurance": "confirmed"
+          },
+          {
+            "type": "ownership",
+            "label": "Resource ownership derivation",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 9,
+                "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:d525216bd1bb2930"
+              }
+            ],
+            "confidence": 0.84,
+            "assurance": "confirmed"
+          }
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "edge:df621c52d80e8282",
+        "from": "entrypoint:4b2ea28c1d4f8a82",
+        "to": "secret:07d154c042bee004",
+        "kind": "uses-secret",
+        "label": "Workflow uses OPENAI_API_KEY",
+        "evidence": [
+          {
+            "file": ".github/workflows/hedge-fix.yml",
+            "line": 174,
+            "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+            "extractor": "github-workflow-secret",
+            "subjectId": "edge:df621c52d80e8282"
+          }
+        ],
+        "controls": [],
+        "confidence": 1
+      },
+      {
+        "id": "edge:ffc769fcaeac42ef",
+        "from": "entrypoint:7687698fbe395d3f",
+        "to": "auth-control:7bf2b37d213596d1",
+        "kind": "authenticates",
+        "evidence": [
+          {
+            "file": "app/api/notes/route.ts",
+            "line": 2,
+            "snippet": "const session = await auth(request);",
+            "extractor": "typescript-ast-control",
+            "subjectId": "edge:ffc769fcaeac42ef"
+          }
+        ],
+        "controls": [
+          {
+            "type": "authentication",
+            "label": "Authentication check: auth",
+            "evidence": [
+              {
+                "file": "app/api/notes/route.ts",
+                "line": 2,
+                "snippet": "const session = await auth(request);",
+                "extractor": "typescript-ast-control",
+                "subjectId": "edge:ffc769fcaeac42ef"
+              }
+            ],
+            "confidence": 0.93,
+            "assurance": "confirmed"
+          }
+        ],
+        "confidence": 0.93
+      }
+    ],
+    "assumptions": [
+      "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
+      "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
+      "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
+      "Repository evidence coverage: 14/14 candidate files and 73560 bytes analyzed."
+    ],
+    "unknowns": [
+      "Sensitive assets were not confirmed in .hedge/context.yml.",
+      "Internet-facing deployment surfaces were not confirmed in .hedge/context.yml.",
+      "Authentication mechanisms were inferred from code and not confirmed in .hedge/context.yml.",
+      "Privileged roles were not confirmed in .hedge/context.yml.",
+      "Trusted external services were not confirmed in .hedge/context.yml."
+    ],
+    "coverage": {
+      "status": "complete",
+      "discoveredFiles": 14,
+      "includedFiles": 14,
+      "includedBytes": 73560,
+      "omitted": {
+        "fileLimit": 0,
+        "byteLimit": 0,
+        "unsafeOrUnreadable": 0,
+        "binary": 0
+      },
+      "diagnostics": []
+    }
+  },
+  "findings": [
+    {
+      "id": "HEDGE-001",
+      "fingerprint": "b5b7cddd70321601ed3c2364",
+      "title": "Publicly triggerable workflow adds repository write permissions",
+      "severity": "high",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Tampering",
+        "Elevation of Privilege"
+      ],
+      "cwe": [],
+      "asset": "Repository contents and automation identity",
+      "attackerCapability": "Trigger the issue_comment workflow event",
+      "entryPoint": "Workflow Hedge Codex remediation (issue_comment)",
+      "trustBoundary": "Untrusted GitHub event to repository write token",
+      "precondition": "The workflow token receives write permission on a publicly triggerable event.",
+      "attackPath": [
+        "External contributor",
+        "Workflow Hedge Codex remediation (issue_comment)",
+        "Write permissions: job:publish-draft:contents, job:publish-draft:pull-requests"
+      ],
+      "potentialImpact": "Untrusted event data or a compromised action step may modify repository resources.",
+      "existingControls": [],
+      "missingControls": [
+        "Least-privilege job permissions",
+        "Separate untrusted analysis from privileged publication"
+      ],
+      "securityInvariant": "Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 4,
+          "snippet": "issue_comment:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:4b2ea28c1d4f8a82"
+        }
+      ],
+      "confidence": 0.86,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge Codex remediation (issue_comment)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"keeps Workflow Hedge Codex remediation (issue_comment) at least privilege\", async () => {\n  const permissions = await resolvedWorkflowPermissions();\n  expect(permissions).not.toContain(\"write-all\");\n});",
+        "purpose": "Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: Publicly triggerable workflow adds repository write permissions.\nSecurity invariant: Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write.\nEntry point: Workflow Hedge Codex remediation (issue_comment)\nMissing controls: Least-privilege job permissions, Separate untrusted analysis from privileged publication.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.431Z",
+      "updatedAt": "2026-07-19T19:58:14.431Z"
+    },
+    {
+      "id": "HEDGE-002",
+      "fingerprint": "3bb1252da7c933dfc02ac2c5",
+      "title": "Publicly triggerable workflow adds repository write permissions",
+      "severity": "high",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Tampering",
+        "Elevation of Privilege"
+      ],
+      "cwe": [],
+      "asset": "Repository contents and automation identity",
+      "attackerCapability": "Trigger the issue_comment workflow event",
+      "entryPoint": "Workflow Hedge risk acceptance (issue_comment)",
+      "trustBoundary": "Untrusted GitHub event to repository write token",
+      "precondition": "The workflow token receives write permission on a publicly triggerable event.",
+      "attackPath": [
+        "External contributor",
+        "Workflow Hedge risk acceptance (issue_comment)",
+        "Write permissions: workflow:contents, workflow:pull-requests"
+      ],
+      "potentialImpact": "Untrusted event data or a compromised action step may modify repository resources.",
+      "existingControls": [],
+      "missingControls": [
+        "Least-privilege job permissions",
+        "Separate untrusted analysis from privileged publication"
+      ],
+      "securityInvariant": "Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-prune.yml",
+          "line": 3,
+          "snippet": "issue_comment:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:990d177729aa156e"
+        }
+      ],
+      "confidence": 0.86,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge risk acceptance (issue_comment)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"keeps Workflow Hedge risk acceptance (issue_comment) at least privilege\", async () => {\n  const permissions = await resolvedWorkflowPermissions();\n  expect(permissions).not.toContain(\"write-all\");\n});",
+        "purpose": "Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: Publicly triggerable workflow adds repository write permissions.\nSecurity invariant: Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write.\nEntry point: Workflow Hedge risk acceptance (issue_comment)\nMissing controls: Least-privilege job permissions, Separate untrusted analysis from privileged publication.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.431Z",
+      "updatedAt": "2026-07-19T19:58:14.431Z"
+    },
+    {
+      "id": "HEDGE-003",
+      "fingerprint": "ba55413eeb924ea14bd15498",
+      "title": "pull_request_target workflow newly combines untrusted PR context with secrets",
+      "severity": "critical",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Tampering",
+        "Information Disclosure",
+        "Elevation of Privilege"
+      ],
+      "cwe": [],
+      "asset": "Repository credentials and protected automation",
+      "attackerCapability": "Open or modify a pull request from an untrusted branch",
+      "entryPoint": "Workflow Hedge security diff (pull_request_target)",
+      "trustBoundary": "Untrusted pull request metadata to privileged workflow",
+      "precondition": "The workflow consumes PR-controlled data or checks out PR code while secrets are available.",
+      "attackPath": [
+        "Pull request author",
+        "Workflow Hedge security diff (pull_request_target)",
+        "Repository secret or write token"
+      ],
+      "potentialImpact": "Untrusted contribution content may influence a secret-bearing workflow.",
+      "existingControls": [],
+      "missingControls": [
+        "Strict separation between untrusted PR data and privileged jobs",
+        "No execution of PR-controlled code in the secret-bearing job"
+      ],
+      "securityInvariant": "A pull_request_target workflow must never execute or interpolate untrusted PR content in a privileged context.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 7,
+          "snippet": "pull_request_target:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:e5ae053d65935696"
+        },
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 92,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "github-workflow-secret",
+          "subjectId": "edge:86b3e9be43ddf15a"
+        }
+      ],
+      "confidence": 0.94,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge security diff (pull_request_target)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"keeps untrusted pull request content outside the privileged workflow Workflow Hedge security diff (pull_request_target)\", async () => {\n  const result = await simulateForkPullRequest({ changedScript: \"exfiltrate-secrets\" });\n  expect(result.secretBearingJobExecutedUntrustedCode).toBe(false);\n});",
+        "purpose": "A pull_request_target workflow must never execute or interpolate untrusted PR content in a privileged context."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: pull_request_target workflow newly combines untrusted PR context with secrets.\nSecurity invariant: A pull_request_target workflow must never execute or interpolate untrusted PR content in a privileged context.\nEntry point: Workflow Hedge security diff (pull_request_target)\nMissing controls: Strict separation between untrusted PR data and privileged jobs, No execution of PR-controlled code in the secret-bearing job.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.432Z",
+      "updatedAt": "2026-07-19T19:58:14.432Z"
+    },
+    {
+      "id": "HEDGE-004",
+      "fingerprint": "ffb2cb0631c66c5c47adcbf9",
+      "title": "Publicly triggerable workflow adds repository write permissions",
+      "severity": "high",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Tampering",
+        "Elevation of Privilege"
+      ],
+      "cwe": [],
+      "asset": "Repository contents and automation identity",
+      "attackerCapability": "Trigger the pull_request_target workflow event",
+      "entryPoint": "Workflow Hedge security diff (pull_request_target)",
+      "trustBoundary": "Untrusted GitHub event to repository write token",
+      "precondition": "The workflow token receives write permission on a publicly triggerable event.",
+      "attackPath": [
+        "External contributor",
+        "Workflow Hedge security diff (pull_request_target)",
+        "Write permissions: job:publish:pull-requests, job:publish:security-events"
+      ],
+      "potentialImpact": "Untrusted event data or a compromised action step may modify repository resources.",
+      "existingControls": [],
+      "missingControls": [
+        "Least-privilege job permissions",
+        "Separate untrusted analysis from privileged publication"
+      ],
+      "securityInvariant": "Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 7,
+          "snippet": "pull_request_target:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:e5ae053d65935696"
+        }
+      ],
+      "confidence": 0.86,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge security diff (pull_request_target)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"keeps Workflow Hedge security diff (pull_request_target) at least privilege\", async () => {\n  const permissions = await resolvedWorkflowPermissions();\n  expect(permissions).not.toContain(\"write-all\");\n});",
+        "purpose": "Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: Publicly triggerable workflow adds repository write permissions.\nSecurity invariant: Publicly triggerable jobs must remain read-only unless a separate trusted approval gate authorizes a narrowly scoped write.\nEntry point: Workflow Hedge security diff (pull_request_target)\nMissing controls: Least-privilege job permissions, Separate untrusted analysis from privileged publication.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.432Z",
+      "updatedAt": "2026-07-19T19:58:14.432Z"
+    },
+    {
+      "id": "HEDGE-005",
+      "fingerprint": "b2fc0d0ebea9145eab8b38e8",
+      "title": "Privileged workflow checks out untrusted pull request code",
+      "severity": "critical",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Tampering",
+        "Information Disclosure",
+        "Elevation of Privilege"
+      ],
+      "cwe": [],
+      "asset": "Workflow credentials and runner environment",
+      "attackerCapability": "Modify code on the pull request head branch",
+      "entryPoint": "Workflow Hedge security diff (pull_request_target)",
+      "trustBoundary": "Untrusted pull request code to privileged runner",
+      "precondition": "The job checks out the PR head while secrets or write permissions are available.",
+      "attackPath": [
+        "Pull request author",
+        "PR head code",
+        "Workflow Hedge security diff (pull_request_target)",
+        "Privileged runner"
+      ],
+      "potentialImpact": "Repository-controlled scripts or build steps may execute with credentials available to the job.",
+      "existingControls": [],
+      "missingControls": [
+        "Never execute PR head code in the privileged job",
+        "Artifact-only handoff to a separate credential-free verification job"
+      ],
+      "securityInvariant": "A secret-bearing or write-capable workflow must not execute code from an untrusted pull request revision.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 7,
+          "snippet": "pull_request_target:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:e5ae053d65935696"
+        }
+      ],
+      "confidence": 0.97,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge security diff (pull_request_target)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"does not execute pull request head code with privileged credentials in Workflow Hedge security diff (pull_request_target)\", async () => {\n  const result = await simulateForkPullRequest({ changedScript: \"exfiltrate-secrets\" });\n  expect(result.privilegedJobExecutedPullRequestCode).toBe(false);\n});",
+        "purpose": "A secret-bearing or write-capable workflow must not execute code from an untrusted pull request revision."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: Privileged workflow checks out untrusted pull request code.\nSecurity invariant: A secret-bearing or write-capable workflow must not execute code from an untrusted pull request revision.\nEntry point: Workflow Hedge security diff (pull_request_target)\nMissing controls: Never execute PR head code in the privileged job, Artifact-only handoff to a separate credential-free verification job.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.432Z",
+      "updatedAt": "2026-07-19T19:58:14.432Z"
+    },
+    {
+      "id": "HEDGE-006",
+      "fingerprint": "3168e48edcacab75ae75c14b",
+      "title": "Public entry point newly depends on a privileged secret",
+      "severity": "medium",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Information Disclosure"
+      ],
+      "cwe": [],
+      "asset": "OPENAI_API_KEY",
+      "attackerCapability": "Repeatedly invoke the public route and influence error paths or outbound requests",
+      "entryPoint": "Workflow Hedge security diff (pull_request_target)",
+      "trustBoundary": "Public request to privileged credential",
+      "precondition": "The route consumes the secret during request processing.",
+      "attackPath": [
+        "External user",
+        "Workflow Hedge security diff (pull_request_target)",
+        "OPENAI_API_KEY"
+      ],
+      "potentialImpact": "Error handling, logging, or request construction could expose or misuse the credential.",
+      "existingControls": [],
+      "missingControls": [
+        "Secret-safe error handling",
+        "Outbound destination allowlist where relevant",
+        "Log redaction"
+      ],
+      "securityInvariant": "A public request must never control, reveal, or redirect use of a privileged credential.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 7,
+          "snippet": "pull_request_target:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:e5ae053d65935696"
+        },
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 174,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "typescript-ast-secret",
+          "subjectId": "secret:07d154c042bee004"
+        },
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 92,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "typescript-ast-secret",
+          "subjectId": "secret:07d154c042bee004"
+        }
+      ],
+      "confidence": 0.72,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge security diff (pull_request_target)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"does not expose privileged credentials through Workflow Hedge security diff (pull_request_target)\", async () => {\n  const response = await triggerFailurePath();\n  expect(JSON.stringify(response)).not.toMatch(/api[_-]?key|secret|token/i);\n});",
+        "purpose": "A public request must never control, reveal, or redirect use of a privileged credential."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: Public entry point newly depends on a privileged secret.\nSecurity invariant: A public request must never control, reveal, or redirect use of a privileged credential.\nEntry point: Workflow Hedge security diff (pull_request_target)\nMissing controls: Secret-safe error handling, Outbound destination allowlist where relevant, Log redaction.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.432Z",
+      "updatedAt": "2026-07-19T19:58:14.432Z"
+    },
+    {
+      "id": "HEDGE-007",
+      "fingerprint": "d8c8059d9764f88b71d5541f",
+      "title": "Public entry point newly depends on a privileged secret",
+      "severity": "medium",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Information Disclosure"
+      ],
+      "cwe": [],
+      "asset": "OPENAI_API_KEY",
+      "attackerCapability": "Repeatedly invoke the public route and influence error paths or outbound requests",
+      "entryPoint": "Workflow Hedge Codex remediation (issue_comment)",
+      "trustBoundary": "Public request to privileged credential",
+      "precondition": "The route consumes the secret during request processing.",
+      "attackPath": [
+        "External user",
+        "Workflow Hedge Codex remediation (issue_comment)",
+        "OPENAI_API_KEY"
+      ],
+      "potentialImpact": "Error handling, logging, or request construction could expose or misuse the credential.",
+      "existingControls": [],
+      "missingControls": [
+        "Secret-safe error handling",
+        "Outbound destination allowlist where relevant",
+        "Log redaction"
+      ],
+      "securityInvariant": "A public request must never control, reveal, or redirect use of a privileged credential.",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 4,
+          "snippet": "issue_comment:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:4b2ea28c1d4f8a82"
+        },
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 174,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "typescript-ast-secret",
+          "subjectId": "secret:07d154c042bee004"
+        },
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 92,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "typescript-ast-secret",
+          "subjectId": "secret:07d154c042bee004"
+        }
+      ],
+      "confidence": 0.72,
+      "suggestedTest": {
+        "title": "Regression witness for Workflow Hedge Codex remediation (issue_comment)",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"does not expose privileged credentials through Workflow Hedge Codex remediation (issue_comment)\", async () => {\n  const response = await triggerFailurePath();\n  expect(JSON.stringify(response)).not.toMatch(/api[_-]?key|secret|token/i);\n});",
+        "purpose": "A public request must never control, reveal, or redirect use of a privileged credential."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: Public entry point newly depends on a privileged secret.\nSecurity invariant: A public request must never control, reveal, or redirect use of a privileged credential.\nEntry point: Workflow Hedge Codex remediation (issue_comment)\nMissing controls: Secret-safe error handling, Outbound destination allowlist where relevant, Log redaction.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T19:58:14.432Z",
+      "updatedAt": "2026-07-19T19:58:14.432Z"
+    }
+  ],
+  "invariantEvaluations": [],
+  "runs": [
+    {
+      "id": "7bf7fb31e86a0ae1aad24711",
+      "recordedAt": "2026-07-19T19:58:14.435Z",
+      "graphHash": "b47bb7ed5e788657e799bc33c052627bf72a7c96521d550488e5a0a730165d34",
+      "nodeCount": 16,
+      "edgeCount": 7,
+      "openRiskCount": 7,
+      "highestSeverity": "critical",
+      "architectureChanged": true
+    }
+  ],
+  "acceptedRisks": []
+}

@@ -1,0 +1,34 @@
+name: Refresh Hedge model
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        with:
+          command: init
+          github-token: ${{ github.token }}
+          dry-run: true
+      - name: Open reviewable model update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- THREATMODEL.md threatmodel.json .hedge/graph.json; then exit 0; fi
+          BRANCH="hedge/model-${GITHUB_SHA::8}-${GITHUB_RUN_ID}"
+          git switch -c "$BRANCH"
+          git config user.name "hedge-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add THREATMODEL.md threatmodel.json .hedge/graph.json
+          git commit -m "chore: refresh Hedge security model"
+          git push origin "$BRANCH"
+          gh pr create --base "$GITHUB_REF_NAME" --head "$BRANCH" --title "Hedge: refresh security model" --body "Review the evidence-linked architecture update generated from $GITHUB_SHA."

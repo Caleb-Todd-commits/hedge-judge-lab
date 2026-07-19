@@ -1,0 +1,6 @@
+sensitive_assets: []
+internet_facing: []
+authentication: []
+privileged_roles: []
+trusted_external_services: []
+notes: []

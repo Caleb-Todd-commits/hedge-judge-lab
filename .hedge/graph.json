@@ -1,0 +1,818 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2026-07-19T19:58:14.428Z",
+  "repository": "local",
+  "framework": "nextjs",
+  "nodes": [
+    {
+      "id": "auth-control:7bf2b37d213596d1",
+      "kind": "auth-control",
+      "label": "Authentication check: auth",
+      "trustZone": "application",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 2,
+          "snippet": "const session = await auth(request);",
+          "extractor": "typescript-ast-control",
+          "subjectId": "auth-control:7bf2b37d213596d1"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "file": "app/api/notes/route.ts",
+        "controlType": "authentication"
+      }
+    },
+    {
+      "id": "authorization-control:20b83844dc80aa0d",
+      "kind": "authorization-control",
+      "label": "Resource ownership derivation",
+      "trustZone": "application",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 9,
+          "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+          "extractor": "typescript-ast-control",
+          "subjectId": "authorization-control:20b83844dc80aa0d"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "file": "app/api/notes/route.ts",
+        "controlType": "ownership"
+      }
+    },
+    {
+      "id": "authorization-control:f2e1d5e80a7ef898",
+      "kind": "authorization-control",
+      "label": "Resource ownership constraint",
+      "trustZone": "application",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 4,
+          "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+          "extractor": "typescript-ast-control",
+          "subjectId": "authorization-control:f2e1d5e80a7ef898"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "file": "app/api/notes/route.ts",
+        "controlType": "ownership"
+      }
+    },
+    {
+      "id": "data-model:Note",
+      "kind": "data-model",
+      "label": "Note",
+      "trustZone": "data",
+      "evidence": [
+        {
+          "file": "prisma/schema.prisma",
+          "line": 6,
+          "snippet": "model Note {",
+          "extractor": "prisma-extractor",
+          "subjectId": "data-model:Note"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "model": "Note",
+        "fields": [
+          "id",
+          "ownerId",
+          "owner",
+          "title",
+          "body"
+        ],
+        "sensitiveFields": [],
+        "sensitive": false
+      }
+    },
+    {
+      "id": "data-model:User",
+      "kind": "data-model",
+      "label": "User",
+      "trustZone": "data",
+      "evidence": [
+        {
+          "file": "prisma/schema.prisma",
+          "line": 1,
+          "snippet": "model User {",
+          "extractor": "prisma-extractor",
+          "subjectId": "data-model:User"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "model": "User",
+        "fields": [
+          "id",
+          "notes"
+        ],
+        "sensitiveFields": [],
+        "sensitive": true
+      }
+    },
+    {
+      "id": "database:754eec4f7490bdab",
+      "kind": "database",
+      "label": "Database read: note.findMany",
+      "trustZone": "data",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 4,
+          "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+          "extractor": "typescript-ast-operation",
+          "subjectId": "database:754eec4f7490bdab"
+        }
+      ],
+      "controls": [
+        {
+          "type": "authentication",
+          "label": "Authentication check: auth",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 2,
+              "snippet": "const session = await auth(request);",
+              "extractor": "typescript-ast-control",
+              "subjectId": "database:754eec4f7490bdab"
+            }
+          ],
+          "confidence": 0.93,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership constraint",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 4,
+              "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+              "extractor": "typescript-ast-control",
+              "subjectId": "database:754eec4f7490bdab"
+            }
+          ],
+          "confidence": 0.81,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership derivation",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 9,
+              "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+              "extractor": "typescript-ast-control",
+              "subjectId": "database:754eec4f7490bdab"
+            }
+          ],
+          "confidence": 0.84,
+          "assurance": "confirmed"
+        }
+      ],
+      "metadata": {
+        "file": "app/api/notes/route.ts",
+        "model": "note",
+        "operation": "findMany",
+        "userControlled": true
+      }
+    },
+    {
+      "id": "dependency:@aws-sdk/client-s3",
+      "kind": "dependency",
+      "label": "@aws-sdk/client-s3@^3.0.0",
+      "trustZone": "external",
+      "evidence": [
+        {
+          "file": "package.json",
+          "line": 1,
+          "snippet": "{",
+          "extractor": "package-extractor",
+          "subjectId": "dependency:@aws-sdk/client-s3"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "name": "@aws-sdk/client-s3",
+        "version": "^3.0.0"
+      }
+    },
+    {
+      "id": "dependency:next",
+      "kind": "dependency",
+      "label": "next@16.0.0",
+      "trustZone": "external",
+      "evidence": [
+        {
+          "file": "package.json",
+          "line": 1,
+          "snippet": "{",
+          "extractor": "package-extractor",
+          "subjectId": "dependency:next"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "name": "next",
+        "version": "16.0.0"
+      }
+    },
+    {
+      "id": "dependency:prisma",
+      "kind": "dependency",
+      "label": "prisma@^6.0.0",
+      "trustZone": "external",
+      "evidence": [
+        {
+          "file": "package.json",
+          "line": 1,
+          "snippet": "{",
+          "extractor": "package-extractor",
+          "subjectId": "dependency:prisma"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "name": "prisma",
+        "version": "^6.0.0"
+      }
+    },
+    {
+      "id": "entrypoint:4b2ea28c1d4f8a82",
+      "kind": "entrypoint",
+      "label": "Workflow Hedge Codex remediation (issue_comment)",
+      "trustZone": "public",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 4,
+          "snippet": "issue_comment:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:4b2ea28c1d4f8a82"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "method": "WORKFLOW",
+        "event": "issue_comment",
+        "file": ".github/workflows/hedge-fix.yml",
+        "pullRequestTarget": false,
+        "permissions": {
+          "job:authorize:contents": "read",
+          "job:authorize:issues": "read",
+          "job:authorize:pull-requests": "read",
+          "job:remediate:contents": "read",
+          "job:validate-patch:contents": "read",
+          "job:publish-draft:contents": "write",
+          "job:publish-draft:pull-requests": "write"
+        },
+        "writePermissions": [
+          "job:publish-draft:contents",
+          "job:publish-draft:pull-requests"
+        ],
+        "checksOutPullRequestHead": false,
+        "untrustedInterpolationInRun": false,
+        "checkoutPersistsCredentials": false
+      }
+    },
+    {
+      "id": "entrypoint:7687698fbe395d3f",
+      "kind": "entrypoint",
+      "label": "GET /api/notes",
+      "trustZone": "public",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 1,
+          "snippet": "export async function GET(request: Request) {",
+          "extractor": "nextjs-ast-route",
+          "subjectId": "entrypoint:7687698fbe395d3f"
+        }
+      ],
+      "controls": [
+        {
+          "type": "authentication",
+          "label": "Authentication check: auth",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 2,
+              "snippet": "const session = await auth(request);",
+              "extractor": "typescript-ast-control",
+              "subjectId": "entrypoint:7687698fbe395d3f"
+            }
+          ],
+          "confidence": 0.93,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership constraint",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 4,
+              "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+              "extractor": "typescript-ast-control",
+              "subjectId": "entrypoint:7687698fbe395d3f"
+            }
+          ],
+          "confidence": 0.81,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership derivation",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 9,
+              "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+              "extractor": "typescript-ast-control",
+              "subjectId": "entrypoint:7687698fbe395d3f"
+            }
+          ],
+          "confidence": 0.84,
+          "assurance": "confirmed"
+        }
+      ],
+      "metadata": {
+        "method": "GET",
+        "path": "/api/notes",
+        "file": "app/api/notes/route.ts",
+        "framework": "nextjs",
+        "handler": "GET",
+        "extractor": "typescript-ast"
+      }
+    },
+    {
+      "id": "entrypoint:990d177729aa156e",
+      "kind": "entrypoint",
+      "label": "Workflow Hedge risk acceptance (issue_comment)",
+      "trustZone": "public",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-prune.yml",
+          "line": 3,
+          "snippet": "issue_comment:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:990d177729aa156e"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "method": "WORKFLOW",
+        "event": "issue_comment",
+        "file": ".github/workflows/hedge-prune.yml",
+        "pullRequestTarget": false,
+        "permissions": {
+          "workflow:contents": "write",
+          "workflow:pull-requests": "write",
+          "workflow:issues": "read"
+        },
+        "writePermissions": [
+          "workflow:contents",
+          "workflow:pull-requests"
+        ],
+        "checksOutPullRequestHead": false,
+        "untrustedInterpolationInRun": false,
+        "checkoutPersistsCredentials": true
+      }
+    },
+    {
+      "id": "entrypoint:9a322eb01dabea6f",
+      "kind": "entrypoint",
+      "label": "Workflow Hedge counterfactual verification (workflow_dispatch)",
+      "trustZone": "application",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-verify.yml",
+          "line": 4,
+          "snippet": "workflow_dispatch:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:9a322eb01dabea6f"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "method": "WORKFLOW",
+        "event": "workflow_dispatch",
+        "file": ".github/workflows/hedge-verify.yml",
+        "pullRequestTarget": false,
+        "permissions": {
+          "workflow:contents": "read",
+          "job:validate-inputs:contents": "read",
+          "job:prepare-witness:contents": "read",
+          "job:witness-counterfactual:contents": "read",
+          "job:legitimate-behavior:contents": "read",
+          "job:architecture-delta:contents": "read",
+          "job:aggregate-evidence:contents": "read",
+          "job:record-state:contents": "write",
+          "job:record-state:pull-requests": "write"
+        },
+        "writePermissions": [
+          "job:record-state:contents",
+          "job:record-state:pull-requests"
+        ],
+        "checksOutPullRequestHead": false,
+        "untrustedInterpolationInRun": false,
+        "checkoutPersistsCredentials": false
+      }
+    },
+    {
+      "id": "entrypoint:b076fdc38a2fd3cc",
+      "kind": "entrypoint",
+      "label": "Workflow Refresh Hedge model (push)",
+      "trustZone": "application",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-refresh.yml",
+          "line": 3,
+          "snippet": "push:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:b076fdc38a2fd3cc"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "method": "WORKFLOW",
+        "event": "push",
+        "file": ".github/workflows/hedge-refresh.yml",
+        "pullRequestTarget": false,
+        "permissions": {
+          "workflow:contents": "write",
+          "workflow:pull-requests": "write"
+        },
+        "writePermissions": [
+          "workflow:contents",
+          "workflow:pull-requests"
+        ],
+        "checksOutPullRequestHead": false,
+        "untrustedInterpolationInRun": false,
+        "checkoutPersistsCredentials": true
+      }
+    },
+    {
+      "id": "entrypoint:e5ae053d65935696",
+      "kind": "entrypoint",
+      "label": "Workflow Hedge security diff (pull_request_target)",
+      "trustZone": "public",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 7,
+          "snippet": "pull_request_target:",
+          "extractor": "github-workflow-metadata",
+          "subjectId": "entrypoint:e5ae053d65935696"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "method": "WORKFLOW",
+        "event": "pull_request_target",
+        "file": ".github/workflows/hedge.yml",
+        "pullRequestTarget": true,
+        "permissions": {
+          "workflow:contents": "read",
+          "job:collect:contents": "read",
+          "job:collect:pull-requests": "read",
+          "job:publish:contents": "read",
+          "job:publish:pull-requests": "write",
+          "job:publish:security-events": "write"
+        },
+        "writePermissions": [
+          "job:publish:pull-requests",
+          "job:publish:security-events"
+        ],
+        "checksOutPullRequestHead": true,
+        "untrustedInterpolationInRun": false,
+        "checkoutPersistsCredentials": false
+      }
+    },
+    {
+      "id": "secret:07d154c042bee004",
+      "kind": "secret",
+      "label": "OPENAI_API_KEY",
+      "trustZone": "privileged",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 174,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "typescript-ast-secret",
+          "subjectId": "secret:07d154c042bee004"
+        },
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 92,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "typescript-ast-secret",
+          "subjectId": "secret:07d154c042bee004"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "name": "OPENAI_API_KEY"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:3af551256deab10a",
+      "from": "entrypoint:7687698fbe395d3f",
+      "to": "authorization-control:f2e1d5e80a7ef898",
+      "kind": "authorizes",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 4,
+          "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+          "extractor": "typescript-ast-control",
+          "subjectId": "edge:3af551256deab10a"
+        }
+      ],
+      "controls": [
+        {
+          "type": "ownership",
+          "label": "Resource ownership constraint",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 4,
+              "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:3af551256deab10a"
+            }
+          ],
+          "confidence": 0.81,
+          "assurance": "confirmed"
+        }
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "edge:4be1acae82feb540",
+      "from": "entrypoint:7687698fbe395d3f",
+      "to": "authorization-control:20b83844dc80aa0d",
+      "kind": "authorizes",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 9,
+          "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+          "extractor": "typescript-ast-control",
+          "subjectId": "edge:4be1acae82feb540"
+        }
+      ],
+      "controls": [
+        {
+          "type": "ownership",
+          "label": "Resource ownership derivation",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 9,
+              "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:4be1acae82feb540"
+            }
+          ],
+          "confidence": 0.84,
+          "assurance": "confirmed"
+        }
+      ],
+      "confidence": 0.84
+    },
+    {
+      "id": "edge:86b3e9be43ddf15a",
+      "from": "entrypoint:e5ae053d65935696",
+      "to": "secret:07d154c042bee004",
+      "kind": "uses-secret",
+      "label": "Workflow uses OPENAI_API_KEY",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge.yml",
+          "line": 92,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "github-workflow-secret",
+          "subjectId": "edge:86b3e9be43ddf15a"
+        }
+      ],
+      "controls": [],
+      "confidence": 1
+    },
+    {
+      "id": "edge:8ffdc332815a44a2",
+      "from": "entrypoint:7687698fbe395d3f",
+      "to": "database:754eec4f7490bdab",
+      "kind": "reads",
+      "label": "Database read: note.findMany",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 4,
+          "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+          "extractor": "typescript-ast-operation",
+          "subjectId": "edge:8ffdc332815a44a2"
+        }
+      ],
+      "controls": [
+        {
+          "type": "authentication",
+          "label": "Authentication check: auth",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 2,
+              "snippet": "const session = await auth(request);",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:8ffdc332815a44a2"
+            }
+          ],
+          "confidence": 0.93,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership constraint",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 4,
+              "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:8ffdc332815a44a2"
+            }
+          ],
+          "confidence": 0.81,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership derivation",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 9,
+              "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:8ffdc332815a44a2"
+            }
+          ],
+          "confidence": 0.84,
+          "assurance": "confirmed"
+        }
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "edge:d525216bd1bb2930",
+      "from": "database:754eec4f7490bdab",
+      "to": "data-model:Note",
+      "kind": "reads",
+      "label": "Database read: note.findMany",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 4,
+          "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+          "extractor": "typescript-ast-operation",
+          "subjectId": "edge:d525216bd1bb2930"
+        }
+      ],
+      "controls": [
+        {
+          "type": "authentication",
+          "label": "Authentication check: auth",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 2,
+              "snippet": "const session = await auth(request);",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:d525216bd1bb2930"
+            }
+          ],
+          "confidence": 0.93,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership constraint",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 4,
+              "snippet": "const notes = await prisma.note.findMany({ where: { ownerId: session.user.id } });",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:d525216bd1bb2930"
+            }
+          ],
+          "confidence": 0.81,
+          "assurance": "confirmed"
+        },
+        {
+          "type": "ownership",
+          "label": "Resource ownership derivation",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 9,
+              "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:d525216bd1bb2930"
+            }
+          ],
+          "confidence": 0.84,
+          "assurance": "confirmed"
+        }
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "edge:df621c52d80e8282",
+      "from": "entrypoint:4b2ea28c1d4f8a82",
+      "to": "secret:07d154c042bee004",
+      "kind": "uses-secret",
+      "label": "Workflow uses OPENAI_API_KEY",
+      "evidence": [
+        {
+          "file": ".github/workflows/hedge-fix.yml",
+          "line": 174,
+          "snippet": "openai-api-key: ${{ secrets.OPENAI_API_KEY }}",
+          "extractor": "github-workflow-secret",
+          "subjectId": "edge:df621c52d80e8282"
+        }
+      ],
+      "controls": [],
+      "confidence": 1
+    },
+    {
+      "id": "edge:ffc769fcaeac42ef",
+      "from": "entrypoint:7687698fbe395d3f",
+      "to": "auth-control:7bf2b37d213596d1",
+      "kind": "authenticates",
+      "evidence": [
+        {
+          "file": "app/api/notes/route.ts",
+          "line": 2,
+          "snippet": "const session = await auth(request);",
+          "extractor": "typescript-ast-control",
+          "subjectId": "edge:ffc769fcaeac42ef"
+        }
+      ],
+      "controls": [
+        {
+          "type": "authentication",
+          "label": "Authentication check: auth",
+          "evidence": [
+            {
+              "file": "app/api/notes/route.ts",
+              "line": 2,
+              "snippet": "const session = await auth(request);",
+              "extractor": "typescript-ast-control",
+              "subjectId": "edge:ffc769fcaeac42ef"
+            }
+          ],
+          "confidence": 0.93,
+          "assurance": "confirmed"
+        }
+      ],
+      "confidence": 0.93
+    }
+  ],
+  "assumptions": [
+    "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
+    "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
+    "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
+    "Repository evidence coverage: 14/14 candidate files and 73560 bytes analyzed."
+  ],
+  "unknowns": [
+    "Sensitive assets were not confirmed in .hedge/context.yml.",
+    "Internet-facing deployment surfaces were not confirmed in .hedge/context.yml.",
+    "Authentication mechanisms were inferred from code and not confirmed in .hedge/context.yml.",
+    "Privileged roles were not confirmed in .hedge/context.yml.",
+    "Trusted external services were not confirmed in .hedge/context.yml."
+  ],
+  "coverage": {
+    "status": "complete",
+    "discoveredFiles": 14,
+    "includedFiles": 14,
+    "includedBytes": 73560,
+    "omitted": {
+      "fileLimit": 0,
+      "byteLimit": 0,
+      "unsafeOrUnreadable": 0,
+      "binary": 0
+    },
+    "diagnostics": []
+  }
+}
