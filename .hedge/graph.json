@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-07-19T21:21:14.295Z",
+  "generatedAt": "2026-07-19T21:56:48.447Z",
   "repository": "Caleb-Todd-commits/hedge-judge-lab",
   "framework": "nextjs",
   "nodes": [
@@ -856,7 +856,7 @@
     "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
     "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
     "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
-    "Repository evidence coverage: 17/17 candidate files and 150330 bytes analyzed."
+    "Repository evidence coverage: 17/17 candidate files and 160486 bytes analyzed."
   ],
   "unknowns": [
     "Sensitive assets were not confirmed in .hedge/context.yml.",
@@ -869,7 +869,7 @@
     "status": "complete",
     "discoveredFiles": 17,
     "includedFiles": 17,
-    "includedBytes": 150330,
+    "includedBytes": 160486,
     "omitted": {
       "fileLimit": 0,
       "byteLimit": 0,
