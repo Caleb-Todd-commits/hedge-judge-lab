@@ -1,19 +1,19 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-07-19T21:21:14.316Z",
+  "generatedAt": "2026-07-19T21:38:40.904Z",
   "stateIntegrity": {
-    "graphHash": "aeeedb965e45d3bd8b6ecfe017e2580d14ca84ca05c69ca80932aef9b00b88bf",
-    "registerHash": "e0557c698912f4d3119e16aaa28b500eba0a90fefe1272a3678be9f97ac55644",
+    "graphHash": "90726408a275d8becc315b2bfa8d7c588abc88cab579c93fd0bf875c26a654b4",
+    "registerHash": "656826751ef75c32533e676fdeb02a153e3749f81b459adc00329bde4f7d8db9",
     "algorithm": "sha256-stable-json-v2",
     "configHash": "38746126c0e8a7b5e75d04443a1454eabf4719e629278533332a1466ca766c91",
     "contextHash": "3e2be10dbf6afa4e43175d5d86c8a46e704aded921f0e2b3705e731e32bbeaf4",
-    "sourceCommit": "167f78776f78c8fd2cf9ba4fe13e80fdedc60af0",
+    "sourceCommit": "3cf2d3f04c649a6f0fb3bd17648b5b3e4f98911e",
     "toolVersion": "0.5.2"
   },
   "nextRiskNumber": 10,
   "graph": {
     "schemaVersion": "0.1",
-    "generatedAt": "2026-07-19T21:21:14.295Z",
+    "generatedAt": "2026-07-19T21:38:40.885Z",
     "repository": "Caleb-Todd-commits/hedge-judge-lab",
     "framework": "nextjs",
     "nodes": [
@@ -869,7 +869,7 @@
       "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
       "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
       "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
-      "Repository evidence coverage: 17/17 candidate files and 150330 bytes analyzed."
+      "Repository evidence coverage: 17/17 candidate files and 160326 bytes analyzed."
     ],
     "unknowns": [
       "Sensitive assets were not confirmed in .hedge/context.yml.",
@@ -882,7 +882,7 @@
       "status": "complete",
       "discoveredFiles": 17,
       "includedFiles": 17,
-      "includedBytes": 150330,
+      "includedBytes": 160326,
       "omitted": {
         "fileLimit": 0,
         "byteLimit": 0,
@@ -1436,6 +1436,17 @@
       "openRiskCount": 9,
       "highestSeverity": "critical",
       "architectureChanged": true
+    },
+    {
+      "id": "9ac974d7a80d6731d2fca7cd",
+      "recordedAt": "2026-07-19T21:38:40.901Z",
+      "sourceCommit": "3cf2d3f04c649a6f0fb3bd17648b5b3e4f98911e",
+      "graphHash": "90726408a275d8becc315b2bfa8d7c588abc88cab579c93fd0bf875c26a654b4",
+      "nodeCount": 18,
+      "edgeCount": 8,
+      "openRiskCount": 9,
+      "highestSeverity": "critical",
+      "architectureChanged": false
     }
   ],
   "acceptedRisks": []
