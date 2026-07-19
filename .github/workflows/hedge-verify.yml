@@ -376,7 +376,7 @@ jobs:
           NODE
       - name: Build exact offline architecture delta
         id: hedge
-        uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        uses: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
         with:
           command: check
           base-ref: ${{ needs.validate-inputs.outputs.vulnerable_sha }}
@@ -616,7 +616,7 @@ jobs:
           name: hedge-verification-${{ needs.validate-inputs.outputs.risk_id }}-${{ github.run_id }}
           path: .hedge/verification
       - name: Record lifecycle evidence in trusted state
-        uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        uses: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
         with:
           command: verify
           risk-id: ${{ needs.validate-inputs.outputs.risk_id }}

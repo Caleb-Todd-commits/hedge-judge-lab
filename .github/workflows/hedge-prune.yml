@@ -32,7 +32,7 @@ jobs:
           ref: ${{ steps.command.outputs.base_ref }}
           fetch-depth: 0
       - name: Record acceptance in trusted state
-        uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        uses: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
         with:
           command: prune
           risk-id: ${{ steps.command.outputs.risk_id }}

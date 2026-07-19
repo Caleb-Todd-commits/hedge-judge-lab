@@ -1,5 +1,23 @@
-framework: nextjs
+framework: auto
 fail_on: high
 ignored_paths:
-  - .next/**
-  - coverage/**
+  - docs/**
+  - "**/*.test.ts"
+models:
+  triage: gpt-5.6-luna
+  analysis: gpt-5.6-sol
+# Optional organization-specific architecture constraints:
+# policies:
+#   - id: billing-rate-limit
+#     name: Billing endpoints require rate limiting
+#     severity: high
+#     match:
+#       kinds: [entrypoint]
+#       trust_zones: [public]
+#       label_pattern: "* /api/billing/*"
+#     require_controls: [authentication, rate-limit]
+#     security_invariant: Public billing endpoints must authenticate and enforce rate limits.
+#     potential_impact: Automated abuse may create fraudulent or excessive billing operations.
+limits:
+  max_files: 120
+  max_bytes: 350000

@@ -41,7 +41,7 @@ jobs:
       # target repository command or package lifecycle script is executed.
       - name: Collect exact base/head architecture evidence
         id: hedge
-        uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        uses: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
         with:
           command: collect
           github-token: ${{ github.token }}
@@ -53,7 +53,7 @@ jobs:
           collection-manifest-path: ${{ runner.temp }}/hedge-collection/collection-manifest.json
           workflow-ref: ${{ github.workflow_ref }}
           workflow-sha: ${{ github.workflow_sha }}
-          action-ref: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+          action-ref: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
 
       - name: Upload integrity-bound collection
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -86,7 +86,7 @@ jobs:
 
       - name: Reason over the validated bounded bundle
         id: hedge
-        uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        uses: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
         with:
           command: reason
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
@@ -98,7 +98,7 @@ jobs:
           run-manifest-path: ${{ runner.temp }}/hedge-reason/run-manifest.json
           workflow-ref: ${{ github.workflow_ref }}
           workflow-sha: ${{ github.workflow_sha }}
-          action-ref: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+          action-ref: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
 
       - name: Upload validated reasoning bundle
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -140,7 +140,7 @@ jobs:
 
       - name: Validate bindings, recheck head, and publish
         id: hedge
-        uses: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+        uses: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
         with:
           command: publish
           github-token: ${{ github.token }}
@@ -152,7 +152,7 @@ jobs:
           run-manifest-path: ${{ runner.temp }}/hedge-reason/run-manifest.json
           workflow-ref: ${{ github.workflow_ref }}
           workflow-sha: ${{ github.workflow_sha }}
-          action-ref: Caleb-Todd-commits/hedge-security-diff@824e6bed8fbf7ae051d45a20897916f53efd918f
+          action-ref: Caleb-Todd-commits/hedge-security-diff@40f56f801e8a0bdbfbe3a83b578381f387eb945e
 
       - name: Upload bounded reports
         if: always()

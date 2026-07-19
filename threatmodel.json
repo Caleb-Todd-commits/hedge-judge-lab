@@ -1,18 +1,18 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-07-19T19:58:14.444Z",
+  "generatedAt": "2026-07-19T20:13:42.947Z",
   "stateIntegrity": {
-    "graphHash": "b47bb7ed5e788657e799bc33c052627bf72a7c96521d550488e5a0a730165d34",
-    "registerHash": "67e67f67e275513e0160c8e49cb83cb03865db0fbaddcbf9d8688c65904ae34c",
+    "graphHash": "068c102d6aa75d50547627a306298ef4a05551f4b2819e4c8849444bacea67bb",
+    "registerHash": "583fa93630a55c87f26e8c910ac5b14a8886b17d4b8d04e8b416fa120753dbde",
     "algorithm": "sha256-stable-json-v2",
-    "configHash": "ce89e6595672ef2c2c95a681d1c0eed4a0efd83b201baee4aed6a0b244350fd3",
+    "configHash": "38746126c0e8a7b5e75d04443a1454eabf4719e629278533332a1466ca766c91",
     "contextHash": "3e2be10dbf6afa4e43175d5d86c8a46e704aded921f0e2b3705e731e32bbeaf4",
     "toolVersion": "0.5.2"
   },
   "nextRiskNumber": 8,
   "graph": {
     "schemaVersion": "0.1",
-    "generatedAt": "2026-07-19T19:58:14.428Z",
+    "generatedAt": "2026-07-19T20:13:42.928Z",
     "repository": "local",
     "framework": "nextjs",
     "nodes": [
@@ -805,7 +805,7 @@
       "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
       "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
       "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
-      "Repository evidence coverage: 14/14 candidate files and 73560 bytes analyzed."
+      "Repository evidence coverage: 18/18 candidate files and 159688 bytes analyzed."
     ],
     "unknowns": [
       "Sensitive assets were not confirmed in .hedge/context.yml.",
@@ -816,9 +816,9 @@
     ],
     "coverage": {
       "status": "complete",
-      "discoveredFiles": 14,
-      "includedFiles": 14,
-      "includedBytes": 73560,
+      "discoveredFiles": 18,
+      "includedFiles": 18,
+      "includedBytes": 159688,
       "omitted": {
         "fileLimit": 0,
         "byteLimit": 0,
@@ -1236,6 +1236,16 @@
       "openRiskCount": 7,
       "highestSeverity": "critical",
       "architectureChanged": true
+    },
+    {
+      "id": "04f19f7362a058d52e361d40",
+      "recordedAt": "2026-07-19T20:13:42.945Z",
+      "graphHash": "068c102d6aa75d50547627a306298ef4a05551f4b2819e4c8849444bacea67bb",
+      "nodeCount": 16,
+      "edgeCount": 7,
+      "openRiskCount": 7,
+      "highestSeverity": "critical",
+      "architectureChanged": false
     }
   ],
   "acceptedRisks": []
