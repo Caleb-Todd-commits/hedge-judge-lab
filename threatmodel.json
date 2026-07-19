@@ -1,9 +1,9 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-07-19T21:21:14.316Z",
+  "generatedAt": "2026-07-19T22:03:03.473Z",
   "stateIntegrity": {
     "graphHash": "aeeedb965e45d3bd8b6ecfe017e2580d14ca84ca05c69ca80932aef9b00b88bf",
-    "registerHash": "e0557c698912f4d3119e16aaa28b500eba0a90fefe1272a3678be9f97ac55644",
+    "registerHash": "8ca62af94280ce90e77bc01120981755c297161241a9403a154e7f2da9e1264b",
     "algorithm": "sha256-stable-json-v2",
     "configHash": "38746126c0e8a7b5e75d04443a1454eabf4719e629278533332a1466ca766c91",
     "contextHash": "3e2be10dbf6afa4e43175d5d86c8a46e704aded921f0e2b3705e731e32bbeaf4",
@@ -1347,7 +1347,7 @@
       "title": "New storage write crosses a trust boundary without complete upload controls",
       "severity": "high",
       "origin": "deterministic",
-      "status": "open",
+      "status": "verified",
       "stride": [
         "Tampering",
         "Denial of Service"
@@ -1399,9 +1399,109 @@
         "purpose": "Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage."
       },
       "remediationPrompt": "Remediate this evidence-backed Hedge finding: New storage write crosses a trust boundary without complete upload controls.\nSecurity invariant: Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage.\nEntry point: POST /api/files/upload\nMissing controls: Verified authentication, Payload or file size limit, Content type allowlist, Object ownership constraint.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
-      "verificationHistory": [],
+      "verificationHistory": [
+        {
+          "recordedAt": "2026-07-19T22:03:03.472Z",
+          "recordedBy": "Caleb-Todd-commits",
+          "vulnerableRevision": "8a54ad2af811b35aa8850f2b5e53a4aaae6683a6",
+          "repairedRevision": "93ec34fc42f843d9b699fd55b8cd776f5c2f931a",
+          "vulnerableRevisionWitnessSucceeded": true,
+          "repairedRevisionWitnessBlocked": true,
+          "legitimateBehaviorPassed": true,
+          "architectureControlChanged": true,
+          "witnessDigest": "7dafb61228ecc3bb6c77551b944193ec2069e5aa48b2cd11b5c67ccb598a40dd",
+          "vulnerableOutcome": "reproduced",
+          "repairedOutcome": "blocked-by-control",
+          "graphDeltaDigest": "662471227d76a03d817c03ca12e9f245bc9a6004b01b9803fc6857c1222928ca",
+          "architectureEvidence": [
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 3,
+              "snippet": "export async function POST(request: Request) {",
+              "extractor": "nextjs-ast-route",
+              "commit": "8a54ad2af811b35aa8850f2b5e53a4aaae6683a6",
+              "snapshot": "base",
+              "subjectId": "entrypoint:7821443e29938cb4"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 3,
+              "snippet": "export async function POST(request: Request) {",
+              "extractor": "nextjs-ast-route",
+              "commit": "93ec34fc42f843d9b699fd55b8cd776f5c2f931a",
+              "snapshot": "head",
+              "subjectId": "entrypoint:7821443e29938cb4"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 6,
+              "snippet": "await client.send(",
+              "extractor": "typescript-ast-operation",
+              "commit": "8a54ad2af811b35aa8850f2b5e53a4aaae6683a6",
+              "snapshot": "base",
+              "subjectId": "storage:ac193b90989396d6"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 14,
+              "snippet": "await client.send(",
+              "extractor": "typescript-ast-operation",
+              "commit": "93ec34fc42f843d9b699fd55b8cd776f5c2f931a",
+              "snapshot": "head",
+              "subjectId": "storage:ac193b90989396d6"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 6,
+              "snippet": "await client.send(",
+              "extractor": "typescript-ast-operation",
+              "commit": "8a54ad2af811b35aa8850f2b5e53a4aaae6683a6",
+              "snapshot": "base",
+              "subjectId": "edge:39aed8b5cfeb2596"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 14,
+              "snippet": "await client.send(",
+              "extractor": "typescript-ast-operation",
+              "commit": "93ec34fc42f843d9b699fd55b8cd776f5c2f931a",
+              "snapshot": "head",
+              "subjectId": "edge:39aed8b5cfeb2596"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 25,
+              "snippet": "const userId = request.headers.get(\"x-demo-user-id\");",
+              "extractor": "typescript-ast-control",
+              "commit": "93ec34fc42f843d9b699fd55b8cd776f5c2f931a",
+              "snapshot": "head",
+              "subjectId": "edge:17ba3337f8e8b1a4"
+            },
+            {
+              "file": "app/api/files/upload/route.ts",
+              "line": 4,
+              "snippet": "const session = await auth(request);",
+              "extractor": "typescript-ast-control",
+              "commit": "93ec34fc42f843d9b699fd55b8cd776f5c2f931a",
+              "snapshot": "head",
+              "subjectId": "edge:1a55597d35212f06"
+            }
+          ],
+          "commands": [
+            "immutable reviewed witness bundle",
+            "network-isolated runtime node:22-bookworm-slim@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
+            "exact offline architecture diff"
+          ],
+          "notes": [],
+          "artifacts": [
+            "hedge-witness-result-vulnerable-29705400423",
+            "hedge-witness-result-repaired-29705400423",
+            "hedge-architecture-proof-29705400423"
+          ]
+        }
+      ],
       "createdAt": "2026-07-19T21:21:14.312Z",
-      "updatedAt": "2026-07-19T21:21:14.312Z"
+      "updatedAt": "2026-07-19T22:03:03.473Z"
     }
   ],
   "invariantEvaluations": [],
