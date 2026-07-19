@@ -2,7 +2,7 @@
 
 > Generated from repository evidence. This document surfaces design-level risks; it is not a vulnerability verdict or a replacement for SAST, DAST, review, or penetration testing.
 
-**Generated:** 2026-07-19T21:21:14.295Z
+**Generated:** 2026-07-19T22:04:33.298Z
 **Framework:** nextjs
 **Open risks:** 8
 
@@ -185,6 +185,7 @@ No repository-defined security invariants were evaluated in the latest persisted
 
 | Recorded | Revision | Nodes | Edges | Open risks | Highest | Analysis |
 |---|---|---:|---:|---:|---|---|
+| 2026-07-19T22:04:33.315Z | 51957874d426d600ec426a12505541608a4485bf | 18 | 8 | 8 | critical | deterministic |
 | 2026-07-19T21:21:14.314Z | 167f78776f78c8fd2cf9ba4fe13e80fdedc60af0 | 18 | 8 | 9 | critical | deterministic |
 | 2026-07-19T20:13:42.945Z | unknown | 16 | 7 | 7 | critical | deterministic |
 | 2026-07-19T19:58:14.435Z | unknown | 16 | 7 | 7 | critical | deterministic |
@@ -194,7 +195,7 @@ No repository-defined security invariants were evaluated in the latest persisted
 - Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.
 - Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.
 - AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.
-- Repository evidence coverage: 17/17 candidate files and 150330 bytes analyzed.
+- Repository evidence coverage: 17/17 candidate files and 164813 bytes analyzed.
 
 ## Unknowns
 
