@@ -1,21 +1,21 @@
 import { writeFileSync } from "node:fs";
 import { evaluateUpload } from "../lib/upload-policy.js";
 
-const result = evaluateUpload({
-  authenticated: false,
-  ownerId: "",
-  type: "application/x-executable",
-  size: 50_000_000
-});
+const rejected = [
+  { authenticated: false, ownerId: "user-123", type: "image/png", size: 1 },
+  { authenticated: true, ownerId: "", type: "image/png", size: 1 },
+  { authenticated: true, ownerId: "user-123", type: "application/x-executable", size: 1 },
+  { authenticated: true, ownerId: "user-123", type: "image/png", size: 5_000_001 }
+].every((upload) => !evaluateUpload(upload).accepted);
 
-const outcome = result.accepted
+const outcome = rejected
   ? {
-      outcome: "reproduced",
-      reason: "Unauthenticated, oversized executable content was accepted."
+      outcome: "blocked-by-control",
+      reason: "Authentication, ownership, content type, and size boundaries rejected independently."
     }
   : {
-      outcome: "blocked-by-control",
-      reason: "The intended upload controls rejected the witness."
+      outcome: "reproduced",
+      reason: "At least one required upload boundary was not enforced."
     };
 const serialized = `${JSON.stringify(outcome)}\n`;
 
@@ -26,3 +26,4 @@ if (process.env.HEDGE_OUTCOME_PATH) {
   });
 }
 process.stdout.write(serialized);
+if (!rejected) process.exitCode = 1;
