@@ -176,7 +176,8 @@ jobs:
           output-file: .hedge/codex-final.md
           sandbox: workspace-write
           safety-strategy: drop-sudo
-          codex-args: '["--ephemeral", "--ignore-user-config"]'
+          # Preserve the Action-managed Responses API proxy configuration.
+          codex-args: '["--ephemeral"]'
 
       - name: Capture and bind patch without credentials
         if: always()
