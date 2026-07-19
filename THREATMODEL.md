@@ -4,7 +4,7 @@
 
 **Generated:** 2026-07-19T21:21:14.295Z
 **Framework:** nextjs
-**Open risks:** 9
+**Open risks:** 8
 
 ## Attack-surface graph
 
@@ -45,7 +45,7 @@ flowchart LR
   n_secret_07d154c042bee004[OPENAI_API_KEY]
   class n_secret_07d154c042bee004 risk;
   n_storage_ac193b90989396d6[Storage write]
-  class n_storage_ac193b90989396d6 risk;
+  class n_storage_ac193b90989396d6 verified;
   n_entrypoint_7821443e29938cb4 -->|Storage write| n_storage_ac193b90989396d6
   n_entrypoint_7687698fbe395d3f -->|authorizes| n_authorization_control_f2e1d5e80a7ef898
   n_entrypoint_7687698fbe395d3f -->|authorizes| n_authorization_control_20b83844dc80aa0d
@@ -175,20 +175,11 @@ No repository-defined security invariants were evaluated in the latest persisted
 - **Evidence:** `app/api/files/upload/route.ts:3`
 - **Confidence:** 90%
 
-### HEDGE-009: New storage write crosses a trust boundary without complete upload controls
-
-- **Severity:** high
-- **Status:** open
-- **Attack path:** External user → POST /api/files/upload → Storage write
-- **Security invariant:** Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage.
-- **Missing controls:** Verified authentication, Payload or file size limit, Content type allowlist, Object ownership constraint
-- **Evidence:** `app/api/files/upload/route.ts:3`, `app/api/files/upload/route.ts:6`
-- **Confidence:** 90%
-
 
 ## Recorded decisions and verified risks
 
-No verified, accepted, or closed risks are recorded.
+- **HEDGE-009** — verified: New storage write crosses a trust boundary without complete upload controls
+  - Verification recorded by Caleb-Todd-commits on 2026-07-19T22:03:03.472Z; vulnerable outcome: reproduced; repaired outcome: blocked-by-control; immutable witness: yes; legitimate behavior passed: true; evidence-linked architecture control changed: true.
 
 ## Recent model history
 
