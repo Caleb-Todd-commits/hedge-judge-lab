@@ -1,19 +1,20 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-07-19T20:13:42.947Z",
+  "generatedAt": "2026-07-19T21:21:14.316Z",
   "stateIntegrity": {
-    "graphHash": "068c102d6aa75d50547627a306298ef4a05551f4b2819e4c8849444bacea67bb",
-    "registerHash": "583fa93630a55c87f26e8c910ac5b14a8886b17d4b8d04e8b416fa120753dbde",
+    "graphHash": "aeeedb965e45d3bd8b6ecfe017e2580d14ca84ca05c69ca80932aef9b00b88bf",
+    "registerHash": "e0557c698912f4d3119e16aaa28b500eba0a90fefe1272a3678be9f97ac55644",
     "algorithm": "sha256-stable-json-v2",
     "configHash": "38746126c0e8a7b5e75d04443a1454eabf4719e629278533332a1466ca766c91",
     "contextHash": "3e2be10dbf6afa4e43175d5d86c8a46e704aded921f0e2b3705e731e32bbeaf4",
+    "sourceCommit": "167f78776f78c8fd2cf9ba4fe13e80fdedc60af0",
     "toolVersion": "0.5.2"
   },
-  "nextRiskNumber": 8,
+  "nextRiskNumber": 10,
   "graph": {
     "schemaVersion": "0.1",
-    "generatedAt": "2026-07-19T20:13:42.928Z",
-    "repository": "local",
+    "generatedAt": "2026-07-19T21:21:14.295Z",
+    "repository": "Caleb-Todd-commits/hedge-judge-lab",
     "framework": "nextjs",
     "nodes": [
       {
@@ -366,6 +367,30 @@
         }
       },
       {
+        "id": "entrypoint:7821443e29938cb4",
+        "kind": "entrypoint",
+        "label": "POST /api/files/upload",
+        "trustZone": "public",
+        "evidence": [
+          {
+            "file": "app/api/files/upload/route.ts",
+            "line": 3,
+            "snippet": "export async function POST(request: Request) {",
+            "extractor": "nextjs-ast-route",
+            "subjectId": "entrypoint:7821443e29938cb4"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "method": "POST",
+          "path": "/api/files/upload",
+          "file": "app/api/files/upload/route.ts",
+          "framework": "nextjs",
+          "handler": "POST",
+          "extractor": "typescript-ast"
+        }
+      },
+      {
         "id": "entrypoint:990d177729aa156e",
         "kind": "entrypoint",
         "label": "Workflow Hedge risk acceptance (issue_comment)",
@@ -534,9 +559,48 @@
         "metadata": {
           "name": "OPENAI_API_KEY"
         }
+      },
+      {
+        "id": "storage:ac193b90989396d6",
+        "kind": "storage",
+        "label": "Storage write",
+        "trustZone": "data",
+        "evidence": [
+          {
+            "file": "app/api/files/upload/route.ts",
+            "line": 6,
+            "snippet": "await client.send(",
+            "extractor": "typescript-ast-operation",
+            "subjectId": "storage:ac193b90989396d6"
+          }
+        ],
+        "controls": [],
+        "metadata": {
+          "file": "app/api/files/upload/route.ts",
+          "callee": "client.send",
+          "userControlled": true
+        }
       }
     ],
     "edges": [
+      {
+        "id": "edge:39aed8b5cfeb2596",
+        "from": "entrypoint:7821443e29938cb4",
+        "to": "storage:ac193b90989396d6",
+        "kind": "writes",
+        "label": "Storage write",
+        "evidence": [
+          {
+            "file": "app/api/files/upload/route.ts",
+            "line": 6,
+            "snippet": "await client.send(",
+            "extractor": "typescript-ast-operation",
+            "subjectId": "edge:39aed8b5cfeb2596"
+          }
+        ],
+        "controls": [],
+        "confidence": 0.94
+      },
       {
         "id": "edge:3af551256deab10a",
         "from": "entrypoint:7687698fbe395d3f",
@@ -805,7 +869,7 @@
       "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
       "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
       "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
-      "Repository evidence coverage: 18/18 candidate files and 159688 bytes analyzed."
+      "Repository evidence coverage: 17/17 candidate files and 150330 bytes analyzed."
     ],
     "unknowns": [
       "Sensitive assets were not confirmed in .hedge/context.yml.",
@@ -816,9 +880,9 @@
     ],
     "coverage": {
       "status": "complete",
-      "discoveredFiles": 18,
-      "includedFiles": 18,
-      "includedBytes": 159688,
+      "discoveredFiles": 17,
+      "includedFiles": 17,
+      "includedBytes": 150330,
       "omitted": {
         "fileLimit": 0,
         "byteLimit": 0,
@@ -1223,6 +1287,121 @@
       "verificationHistory": [],
       "createdAt": "2026-07-19T19:58:14.432Z",
       "updatedAt": "2026-07-19T19:58:14.432Z"
+    },
+    {
+      "id": "HEDGE-008",
+      "fingerprint": "00181ef4242358c6ecfa3c52",
+      "title": "New mutating entry point has no detected authentication control",
+      "severity": "high",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Spoofing",
+        "Elevation of Privilege"
+      ],
+      "cwe": [
+        "CWE-306"
+      ],
+      "asset": "Application data and privileged operations",
+      "attackerCapability": "Unauthenticated network access",
+      "entryPoint": "POST /api/files/upload",
+      "trustBoundary": "Public network to application",
+      "precondition": "The route is deployed and reachable without an upstream authentication control.",
+      "attackPath": [
+        "Public user",
+        "POST /api/files/upload",
+        "Privileged application operation"
+      ],
+      "potentialImpact": "An unauthenticated actor may invoke a state-changing operation.",
+      "existingControls": [],
+      "missingControls": [
+        "Verified authentication",
+        "Authorization scoped to the target resource"
+      ],
+      "securityInvariant": "Only authenticated and authorized principals may invoke POST /api/files/upload.",
+      "evidence": [
+        {
+          "file": "app/api/files/upload/route.ts",
+          "line": 3,
+          "snippet": "export async function POST(request: Request) {",
+          "extractor": "nextjs-ast-route",
+          "subjectId": "entrypoint:7821443e29938cb4"
+        }
+      ],
+      "confidence": 0.9,
+      "suggestedTest": {
+        "title": "Regression witness for POST /api/files/upload",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"rejects unauthenticated access to POST /api/files/upload\", async () => {\n  const response = await requestWithoutSession();\n  expect([401, 403]).toContain(response.status);\n});",
+        "purpose": "Only authenticated and authorized principals may invoke POST /api/files/upload."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: New mutating entry point has no detected authentication control.\nSecurity invariant: Only authenticated and authorized principals may invoke POST /api/files/upload.\nEntry point: POST /api/files/upload\nMissing controls: Verified authentication, Authorization scoped to the target resource.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T21:21:14.311Z",
+      "updatedAt": "2026-07-19T21:21:14.311Z"
+    },
+    {
+      "id": "HEDGE-009",
+      "fingerprint": "ce45a670a30a55124424033b",
+      "title": "New storage write crosses a trust boundary without complete upload controls",
+      "severity": "high",
+      "origin": "deterministic",
+      "status": "open",
+      "stride": [
+        "Tampering",
+        "Denial of Service"
+      ],
+      "cwe": [
+        "CWE-434"
+      ],
+      "asset": "Object storage and downstream file processors",
+      "attackerCapability": "Submit attacker-controlled content to the new entry point",
+      "entryPoint": "POST /api/files/upload",
+      "trustBoundary": "public to data",
+      "precondition": "User-controlled content reaches the storage operation.",
+      "attackPath": [
+        "External user",
+        "POST /api/files/upload",
+        "Storage write"
+      ],
+      "potentialImpact": "Unexpected content, oversized payloads, or cross-tenant object writes may reach privileged storage.",
+      "existingControls": [],
+      "missingControls": [
+        "Verified authentication",
+        "Payload or file size limit",
+        "Content type allowlist",
+        "Object ownership constraint"
+      ],
+      "securityInvariant": "Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage.",
+      "evidence": [
+        {
+          "file": "app/api/files/upload/route.ts",
+          "line": 3,
+          "snippet": "export async function POST(request: Request) {",
+          "extractor": "nextjs-ast-route",
+          "subjectId": "entrypoint:7821443e29938cb4"
+        },
+        {
+          "file": "app/api/files/upload/route.ts",
+          "line": 6,
+          "snippet": "await client.send(",
+          "extractor": "typescript-ast-operation",
+          "subjectId": "storage:ac193b90989396d6"
+        }
+      ],
+      "confidence": 0.9,
+      "suggestedTest": {
+        "title": "Regression witness for POST /api/files/upload",
+        "framework": "vitest",
+        "language": "typescript",
+        "code": "it(\"enforces upload boundaries for POST /api/files/upload\", async () => {\n  const response = await uploadFixture({ type: \"application/x-executable\", bytes: MAX_ALLOWED_BYTES + 1 });\n  expect([400, 413, 415]).toContain(response.status);\n});",
+        "purpose": "Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage."
+      },
+      "remediationPrompt": "Remediate this evidence-backed Hedge finding: New storage write crosses a trust boundary without complete upload controls.\nSecurity invariant: Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage.\nEntry point: POST /api/files/upload\nMissing controls: Verified authentication, Payload or file size limit, Content type allowlist, Object ownership constraint.\nMake the smallest focused change, add a regression witness that fails on the vulnerable revision and passes after the fix, preserve legitimate behavior, run the relevant tests, and explain residual uncertainty.",
+      "verificationHistory": [],
+      "createdAt": "2026-07-19T21:21:14.312Z",
+      "updatedAt": "2026-07-19T21:21:14.312Z"
     }
   ],
   "invariantEvaluations": [],
@@ -1246,6 +1425,17 @@
       "openRiskCount": 7,
       "highestSeverity": "critical",
       "architectureChanged": false
+    },
+    {
+      "id": "4970594a7c3a7e3114570732",
+      "recordedAt": "2026-07-19T21:21:14.314Z",
+      "sourceCommit": "167f78776f78c8fd2cf9ba4fe13e80fdedc60af0",
+      "graphHash": "aeeedb965e45d3bd8b6ecfe017e2580d14ca84ca05c69ca80932aef9b00b88bf",
+      "nodeCount": 18,
+      "edgeCount": 8,
+      "openRiskCount": 9,
+      "highestSeverity": "critical",
+      "architectureChanged": true
     }
   ],
   "acceptedRisks": []

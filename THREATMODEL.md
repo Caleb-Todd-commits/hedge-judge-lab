@@ -2,9 +2,9 @@
 
 > Generated from repository evidence. This document surfaces design-level risks; it is not a vulnerability verdict or a replacement for SAST, DAST, review, or penetration testing.
 
-**Generated:** 2026-07-19T20:13:42.928Z
+**Generated:** 2026-07-19T21:21:14.295Z
 **Framework:** nextjs
-**Open risks:** 7
+**Open risks:** 9
 
 ## Attack-surface graph
 
@@ -32,6 +32,8 @@ flowchart LR
   class n_entrypoint_4b2ea28c1d4f8a82 risk;
   n_entrypoint_7687698fbe395d3f([GET /api/notes])
   class n_entrypoint_7687698fbe395d3f public;
+  n_entrypoint_7821443e29938cb4([POST /api/files/upload])
+  class n_entrypoint_7821443e29938cb4 risk;
   n_entrypoint_990d177729aa156e([Workflow Hedge risk acceptance issue_comment])
   class n_entrypoint_990d177729aa156e risk;
   n_entrypoint_9a322eb01dabea6f([Workflow Hedge counterfactual verification workflow_dispatch])
@@ -42,6 +44,9 @@ flowchart LR
   class n_entrypoint_e5ae053d65935696 risk;
   n_secret_07d154c042bee004[OPENAI_API_KEY]
   class n_secret_07d154c042bee004 risk;
+  n_storage_ac193b90989396d6[Storage write]
+  class n_storage_ac193b90989396d6 risk;
+  n_entrypoint_7821443e29938cb4 -->|Storage write| n_storage_ac193b90989396d6
   n_entrypoint_7687698fbe395d3f -->|authorizes| n_authorization_control_f2e1d5e80a7ef898
   n_entrypoint_7687698fbe395d3f -->|authorizes| n_authorization_control_20b83844dc80aa0d
   n_entrypoint_e5ae053d65935696 -->|Workflow uses OPENAI_API_KEY| n_secret_07d154c042bee004
@@ -49,8 +54,9 @@ flowchart LR
   n_database_754eec4f7490bdab -->|Database read: note.findMany| n_data_model_Note
   n_entrypoint_4b2ea28c1d4f8a82 -->|Workflow uses OPENAI_API_KEY| n_secret_07d154c042bee004
   n_entrypoint_7687698fbe395d3f -->|authenticates| n_auth_control_7bf2b37d213596d1
-  linkStyle 2 stroke:#dc2626,stroke-width:3px;
-  linkStyle 5 stroke:#dc2626,stroke-width:3px;
+  linkStyle 0 stroke:#dc2626,stroke-width:3px;
+  linkStyle 3 stroke:#dc2626,stroke-width:3px;
+  linkStyle 6 stroke:#dc2626,stroke-width:3px;
   classDef public fill:#f4f4f5,stroke:#71717a,color:#18181b;
   classDef application fill:#dcfce7,stroke:#15803d,color:#14532d;
   classDef privileged fill:#fef3c7,stroke:#b45309,color:#78350f;
@@ -79,11 +85,13 @@ No repository-defined security invariants were evaluated in the latest persisted
 - **prisma@^6.0.0** — dependency; trust zone: external; evidence: `package.json:1`
 - **Workflow Hedge Codex remediation (issue_comment)** — entrypoint; trust zone: public; evidence: `.github/workflows/hedge-fix.yml:4`
 - **GET /api/notes** — entrypoint; trust zone: public; evidence: `app/api/notes/route.ts:1`
+- **POST /api/files/upload** — entrypoint; trust zone: public; evidence: `app/api/files/upload/route.ts:3`
 - **Workflow Hedge risk acceptance (issue_comment)** — entrypoint; trust zone: public; evidence: `.github/workflows/hedge-prune.yml:3`
 - **Workflow Hedge counterfactual verification (workflow_dispatch)** — entrypoint; trust zone: application; evidence: `.github/workflows/hedge-verify.yml:4`
 - **Workflow Refresh Hedge model (push)** — entrypoint; trust zone: application; evidence: `.github/workflows/hedge-refresh.yml:3`
 - **Workflow Hedge security diff (pull_request_target)** — entrypoint; trust zone: public; evidence: `.github/workflows/hedge.yml:7`
 - **OPENAI_API_KEY** — secret; trust zone: privileged; evidence: `.github/workflows/hedge-fix.yml:174`, `.github/workflows/hedge.yml:92`
+- **Storage write** — storage; trust zone: data; evidence: `app/api/files/upload/route.ts:6`
 
 ## Open risk register
 
@@ -157,6 +165,26 @@ No repository-defined security invariants were evaluated in the latest persisted
 - **Evidence:** `.github/workflows/hedge-fix.yml:4`, `.github/workflows/hedge-fix.yml:174`, `.github/workflows/hedge.yml:92`
 - **Confidence:** 72%
 
+### HEDGE-008: New mutating entry point has no detected authentication control
+
+- **Severity:** high
+- **Status:** open
+- **Attack path:** Public user → POST /api/files/upload → Privileged application operation
+- **Security invariant:** Only authenticated and authorized principals may invoke POST /api/files/upload.
+- **Missing controls:** Verified authentication, Authorization scoped to the target resource
+- **Evidence:** `app/api/files/upload/route.ts:3`
+- **Confidence:** 90%
+
+### HEDGE-009: New storage write crosses a trust boundary without complete upload controls
+
+- **Severity:** high
+- **Status:** open
+- **Attack path:** External user → POST /api/files/upload → Storage write
+- **Security invariant:** Uploaded content must be authenticated, tenant-scoped, type-checked, and bounded before storage.
+- **Missing controls:** Verified authentication, Payload or file size limit, Content type allowlist, Object ownership constraint
+- **Evidence:** `app/api/files/upload/route.ts:3`, `app/api/files/upload/route.ts:6`
+- **Confidence:** 90%
+
 
 ## Recorded decisions and verified risks
 
@@ -166,6 +194,7 @@ No verified, accepted, or closed risks are recorded.
 
 | Recorded | Revision | Nodes | Edges | Open risks | Highest | Analysis |
 |---|---|---:|---:|---:|---|---|
+| 2026-07-19T21:21:14.314Z | 167f78776f78c8fd2cf9ba4fe13e80fdedc60af0 | 18 | 8 | 9 | critical | deterministic |
 | 2026-07-19T20:13:42.945Z | unknown | 16 | 7 | 7 | critical | deterministic |
 | 2026-07-19T19:58:14.435Z | unknown | 16 | 7 | 7 | critical | deterministic |
 
@@ -174,7 +203,7 @@ No verified, accepted, or closed risks are recorded.
 - Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.
 - Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.
 - AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.
-- Repository evidence coverage: 18/18 candidate files and 159688 bytes analyzed.
+- Repository evidence coverage: 17/17 candidate files and 150330 bytes analyzed.
 
 ## Unknowns
 

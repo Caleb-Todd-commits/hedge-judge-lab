@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-07-19T20:13:42.928Z",
-  "repository": "local",
+  "generatedAt": "2026-07-19T21:21:14.295Z",
+  "repository": "Caleb-Todd-commits/hedge-judge-lab",
   "framework": "nextjs",
   "nodes": [
     {
@@ -354,6 +354,30 @@
       }
     },
     {
+      "id": "entrypoint:7821443e29938cb4",
+      "kind": "entrypoint",
+      "label": "POST /api/files/upload",
+      "trustZone": "public",
+      "evidence": [
+        {
+          "file": "app/api/files/upload/route.ts",
+          "line": 3,
+          "snippet": "export async function POST(request: Request) {",
+          "extractor": "nextjs-ast-route",
+          "subjectId": "entrypoint:7821443e29938cb4"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "method": "POST",
+        "path": "/api/files/upload",
+        "file": "app/api/files/upload/route.ts",
+        "framework": "nextjs",
+        "handler": "POST",
+        "extractor": "typescript-ast"
+      }
+    },
+    {
       "id": "entrypoint:990d177729aa156e",
       "kind": "entrypoint",
       "label": "Workflow Hedge risk acceptance (issue_comment)",
@@ -522,9 +546,48 @@
       "metadata": {
         "name": "OPENAI_API_KEY"
       }
+    },
+    {
+      "id": "storage:ac193b90989396d6",
+      "kind": "storage",
+      "label": "Storage write",
+      "trustZone": "data",
+      "evidence": [
+        {
+          "file": "app/api/files/upload/route.ts",
+          "line": 6,
+          "snippet": "await client.send(",
+          "extractor": "typescript-ast-operation",
+          "subjectId": "storage:ac193b90989396d6"
+        }
+      ],
+      "controls": [],
+      "metadata": {
+        "file": "app/api/files/upload/route.ts",
+        "callee": "client.send",
+        "userControlled": true
+      }
     }
   ],
   "edges": [
+    {
+      "id": "edge:39aed8b5cfeb2596",
+      "from": "entrypoint:7821443e29938cb4",
+      "to": "storage:ac193b90989396d6",
+      "kind": "writes",
+      "label": "Storage write",
+      "evidence": [
+        {
+          "file": "app/api/files/upload/route.ts",
+          "line": 6,
+          "snippet": "await client.send(",
+          "extractor": "typescript-ast-operation",
+          "subjectId": "edge:39aed8b5cfeb2596"
+        }
+      ],
+      "controls": [],
+      "confidence": 0.94
+    },
     {
       "id": "edge:3af551256deab10a",
       "from": "entrypoint:7687698fbe395d3f",
@@ -793,7 +856,7 @@
     "Detected controls are evidence that relevant code exists, not proof that the control is correct or complete.",
     "Public exposure is inferred from supported route and workflow conventions and must be confirmed against deployment configuration.",
     "AST analysis is handler-scoped for supported TypeScript and JavaScript entry points; same-file helpers and supported Next.js middleware are followed, while arbitrary imported helper behavior remains partially unknown.",
-    "Repository evidence coverage: 18/18 candidate files and 159688 bytes analyzed."
+    "Repository evidence coverage: 17/17 candidate files and 150330 bytes analyzed."
   ],
   "unknowns": [
     "Sensitive assets were not confirmed in .hedge/context.yml.",
@@ -804,9 +867,9 @@
   ],
   "coverage": {
     "status": "complete",
-    "discoveredFiles": 18,
-    "includedFiles": 18,
-    "includedBytes": 159688,
+    "discoveredFiles": 17,
+    "includedFiles": 17,
+    "includedBytes": 150330,
     "omitted": {
       "fileLimit": 0,
       "byteLimit": 0,
