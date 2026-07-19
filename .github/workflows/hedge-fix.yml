@@ -334,7 +334,6 @@ jobs:
         if: hashFiles('package.json') != ''
         with:
           node-version: 22
-          cache: npm
       - name: Install without lifecycle scripts and validate without network
         if: hashFiles('package.json') != ''
         timeout-minutes: 10
